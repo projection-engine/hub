@@ -1,0 +1,13 @@
+.DS_Store
+
+node_modules
+/node_modules
+
+public/build
+/public/build
+
+/out
+out
+
+/src-tauri/target
+src-tauri/target

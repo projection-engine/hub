@@ -1,0 +1,4 @@
+- Initializing tauri structure
+- Changing electron dependencies to tauri APIs
+- Tauri settings
+- New branches
