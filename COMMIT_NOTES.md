@@ -1,4 +1,4 @@
-- Initializing tauri structure
-- Changing electron dependencies to tauri APIs
-- Tauri settings
-- New branches
+ - Structuring app to support Tauri APIs
+ - Removing unused components and libs
+ - Removing unused node packages
+ - Removed engine submodule

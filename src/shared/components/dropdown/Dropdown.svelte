@@ -3,7 +3,7 @@
     import transformModal from "./utils/transform-modal.js";
     import {onDestroy, onMount} from "svelte";
     import "./css/dropdown.css"
-    import createPortal from "../create-portal";
+    import createPortal from "../../libs/create-portal";
 
     export let asButton
     export let noBackground = undefined

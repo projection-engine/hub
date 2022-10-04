@@ -11,12 +11,7 @@
   },
   "tauri": {
     "allowlist": {
-      "shell": {
-        "open": true
-      },
-      "window": {
-        "all": true
-      }
+      "all": true
     },
     "bundle": {
       "active": true,
@@ -33,7 +28,7 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "projection.engine.v6.0.0-alpha",
+      "identifier": "projection.engine.hub",
       "longDescription": "",
       "macOS": {
         "entitlements": null,
@@ -63,24 +58,8 @@
         "height": 600,
         "resizable": true,
         "title": "Projection Engine",
-        "width": 800,
-        "url": "home-window.html"
-      },
-      {
-        "fullscreen": false,
-        "height": 600,
-        "resizable": true,
-        "title": "Preferences",
-        "width": 800,
-        "url": "preferences-window.html"
-      },
-      {
-        "fullscreen": false,
-        "height": 600,
-        "resizable": true,
-        "title": "Projection Engine",
-        "width": 800,
-        "url": "editor-window.html"
+        "width": 1200,
+        "url": "index.html"
       }
     ]
   }

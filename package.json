@@ -1,32 +1,27 @@
 {
-  "name": "projection-engine",
-  "version": "6.0.0-alpha",
+  "name": "projection-engine-hub",
+  "version": "10.0.0-alpha",
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -c -w",
-    "start": "sirv public --no-clear"
+    "svelte-start": "sirv public --no-clear"
   },
   "keywords": [],
   "author": "facobackup",
   "license": "MIT",
   "dependencies": {
     "@sveltejs/svelte-virtual-list": "^3.0.1",
-    "ammo-electron-build": "https://github.com/projection-engine/ammo.js.git",
-    "atob": "^2.1.2",
-    "gl-matrix": "^3.4.3",
-    "hdrpng": "https://github.com/enkimute/hdrpng.js.git",
     "marked": "^4.1.0",
-
     "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^17.0.0",
     "@rollup/plugin-node-resolve": "^11.0.0",
     "rollup-plugin-terser": "^7.0.2",
-    "@rollup/plugin-commonjs": "^11.0.0",
+
     "@rollup/plugin-image": "^2.1.1",
     "@rollup/plugin-json": "^4.1.0",
-    "@rollup/plugin-node-resolve": "^7.0.0",
+
     "@tauri-apps/api": "^1.1.0",
     "@tauri-apps/cli": "^1.1.1",
     "rollup": "^2.77.2",

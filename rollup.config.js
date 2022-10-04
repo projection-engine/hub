@@ -43,48 +43,9 @@ const common = (inputFile, outputFile) => ({
 		clearScreen: false
 	}
 })
-const worker = (fileName, output) => ({
-	input: fileName,
-	output: {
-		strict: false,
-		sourcemap: false,
-		file: output,
-		format: 'iife'
-	},
-	plugins: [
-		resolve({
-			browser: true
-		}),
-		commonjs(),
-		json(),
-		uglify()
-	]
-})
+
 export default [
-	{
-		input: "public/backend/index.js",
-		output: {
-			strict: false,
-			sourcemap: false,
-			file: "public/build/electron.js",
-			format: 'cjs'
-		},
-		plugins: [
-			resolve({
-				dedupe: ["electron"]
-			}),
-			commonjs({ignore: ["electron"]}),
-			json(),
-			uglify()
-		]
-	},
-	worker("public/engine/workers/movement/movement-worker.js", "public/build/movement-worker.js"),
-	worker("public/engine/workers/camera/camera-worker.js", "public/build/camera-worker.js"),
-	worker("public/engine/workers/terrain/terrain-worker.js", "public/build/terrain-worker.js"),
-	worker("public/engine/workers/image/image-worker.js", "public/build/image-worker.js"),
-	common("home/root", "home"),
-	common("editor/root", "editor"),
-	common("preferences/root", "preferences")
+	common("home/root", "home")
 ]
 
 function serve() {

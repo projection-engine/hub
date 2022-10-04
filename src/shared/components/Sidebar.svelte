@@ -2,6 +2,7 @@
     import Icon from "./icon/Icon.svelte";
     import Localization from "../libs/Localization";
     import {shell} from "@tauri-apps/api";
+
     export let tab
     export let setTab
     export let options

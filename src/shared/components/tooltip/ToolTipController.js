@@ -1,4 +1,4 @@
-import createPortal from "../create-portal";
+import createPortal from "../../libs/create-portal";
 
 export default class ToolTipController {
     static #initialized = false
