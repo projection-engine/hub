@@ -1,4 +1,3 @@
- - Structuring app to support Tauri APIs
- - Removing unused components and libs
- - Removing unused node packages
- - Removed engine submodule
+- Fixed project creation 
+- Fixed project listing
+- Fixing permissions on tauri conf

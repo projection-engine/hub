@@ -1,24 +1,35 @@
 import Localization from "../shared/libs/Localization";
 import {fs, path} from "@tauri-apps/api"
+import readFile from "./read-file";
 
 export default async function refreshProjects(pathToRead) {
     try {
         const res = await fs.readDir(pathToRead)
         if (!(await fs.exists(pathToRead))) await fs.createDir(pathToRead)
         const data = []
+
         for (let i = 0; i < res.length; i++) {
-            const f = res[i]
-            let filename = pathToRead + f
-
-            const meta = (await fs.readBinaryFile(filename + "/.meta")).toString()
-            const settings = (await fs.readBinaryFile(filename + "/.preferences")).toString()
-            const parts = filename.split(path.sep)
-
-            data.push({
-                id: parts.pop(),
-                meta: meta ? JSON.parse(meta) : undefined,
-                settings: settings ? JSON.parse(settings) : undefined
-            })
+            try {
+                const current = res[i]
+                if (!Array.isArray(current.children))
+                    continue
+                const children = await fs.readDir(current.path)
+                console.log(children)
+                if (!children.find(c => c.path.includes(".meta")))
+                    continue
+                let meta = await readFile(current.path + path.sep + ".meta")
+                if(meta)
+                    meta = JSON.parse(meta)
+                const parts = current.path.split(path.sep)
+                data.push({
+                    id: parts.pop(),
+                    meta,
+                    settings: meta ? meta.settings : undefined
+                })
+            } catch (err) {
+                console.error(err)
+                continue
+            }
         }
         return data.filter(e => e !== undefined).map(e => {
             let res = {...e}

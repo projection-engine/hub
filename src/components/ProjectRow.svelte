@@ -10,15 +10,11 @@
     export let open
     export let data
     export let onRename
-    export let openProjects
     export let selected
 
     $: isSelected = selected === data.id
     let changeDate
     let hovered
-
-
-    $: isOpen = openProjects.includes(data.id)
 
     $: {
         if(data.meta.lastModification) {
@@ -80,9 +76,6 @@
             />
         {:else}
             <strong>{data.meta.name}</strong>
-            {#if isOpen}
-                <div class="open-icon" class:hovered={hovered}><small>Project is open</small></div>
-            {/if}
         {/if}
 
     </div>
@@ -108,30 +101,11 @@
     strong{
         font-weight: 550;
     }
-    .open-icon{
-        width: 10px;
-        height: 10px;
 
-        background: var(--pj-accent-color);
-        border-radius: 10px;
-        overflow: hidden;
-        transition: 150ms linear;
-
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-    }
     .open-icon > small{
         opacity: 0;
     }
-    .hovered{
-        width: fit-content;
-        height: 20px;
 
-        padding: 0 8px;
-
-    }
     .hovered > small{
         opacity: 1;
     }

@@ -4,39 +4,60 @@
     import Icon from "../shared/components/icon/Icon.svelte";
     import {onDestroy, onMount} from "svelte";
     import createPortal from "../shared/libs/create-portal";
+    import Localization from "../shared/libs/Localization";
+    import {fs, path} from "@tauri-apps/api";
+    import {v4} from "uuid";
 
     export let setProjectsToShow
     export let projectsToShow
     export let setSearchString
     export let searchString
-    export let translate
 
-    let openInput = false
+    const translate = (key) => Localization.HOME.HOME[key]
+
     let modal
     let input = ""
+
+    async function createProject() {
+        const projectID = v4()
+        const pathToProject = localStorage.getItem("basePath") + path.sep + projectID
+        await fs.createDir(pathToProject)
+
+
+        await fs.writeFile(
+            pathToProject + path.sep + ".meta",
+            JSON.stringify({
+                    id: projectID,
+                    name,
+                    creationDate: new Date().toDateString()
+                })
+        )
+
+        return projectID
+    }
+
     const create = async (name) => {
-        // const res = await AssetAPI.createProject(!name ? translate("PROJECT_NAME") : name)
-        // setProjectsToShow([
-        //     ...projectsToShow,
-        //     {
-        //         id: res,
-        //         meta: {name: name, creationDate: (new Date()).toLocaleDateString()}
-        //     }
-        // ])
-        //
-        // alert.pushAlert(translate("PROJECT_CREATED"), "success")
-        // openInput = false
-        // input = ""
+        const res = await createProject()
+        setProjectsToShow([
+            ...projectsToShow,
+            {
+                id: res,
+                meta: {name, creationDate: (new Date()).toLocaleDateString()}
+            }
+        ])
+
+        alert.pushAlert(translate("PROJECT_CREATED"), "success")
+        portal.close()
+        input = ""
     }
 
     function handler(event) {
         if (!modal.firstChild.contains(event.target))
-            openInput = false
-
+            portal.close()
     }
 
     const portal = createPortal(999)
-    $: openInput ? portal.open() : portal.close()
+
     onMount(() => {
         portal.create(modal, {backdropFilter: "blur(2px)"})
         document.addEventListener("mousedown", handler)
@@ -65,7 +86,7 @@
         </Input>
     </div>
 
-    <button on:click={() => openInput = !openInput} data-focusbutton="-">
+    <button on:click={() => portal.open()} data-focusbutton="-">
         <Icon>add</Icon>
         {translate("CREATE")}
     </button>

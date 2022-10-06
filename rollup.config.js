@@ -45,7 +45,7 @@ const common = (inputFile, outputFile) => ({
 })
 
 export default [
-	common("home/root", "home")
+	common("root", "home")
 ]
 
 function serve() {
