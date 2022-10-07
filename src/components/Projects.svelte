@@ -1,94 +1,75 @@
 <script>
     import Header from "./Header.svelte";
-    import Icon from "../shared/components/icon/Icon.svelte";
-    import Localization from "../shared/libs/Localization";
+    import Icon from "../../shared/frontend/components/icon/Icon.svelte";
+    import Localization from "../Localization";
     import {onDestroy, onMount} from "svelte";
-
+    import NodeFS from "../../shared/frontend/libs/NodeFS";
     import refreshProjects from "../utils/refresh-projects";
     import ProjectRow from "./ProjectRow.svelte";
     import {v4} from "uuid";
-    import ContextMenuController from "../shared/libs/ContextMenuController";
-    import {fs, path, shell} from "@tauri-apps/api";
-    import readFile from "../utils/read-file";
+    import ContextMenuController from "../../shared/frontend/libs/ContextMenuController";
+    import BASE_PATH from "../BASE_PATH";
+    import PROJECT_FILE_EXTENSION from "../../shared/PROJECT_FILE_EXTENSION";
+    import List from "./List.svelte";
 
-    export let openProjects
-    export let addOpenProjects
+    const pathLib = window.require("path")
+    const os = window.require("os")
+    const {ipcRenderer, shell} = window.require("electron")
 
     let searchString = ""
     let projectsToShow = []
-    let filtered
-    const translate = (key) => Localization.HOME.HOME[key]
-    const internalID = v4()
 
     let selected
 
-    function openProject(p) {
-        addOpenProjects(p)
-    }
-
-    async function load() {
-
-        if (!localStorage.getItem("basePath")){
-            projectsToShow = await refreshProjects(localStorage.getItem("basePath"))
-            return
-        }
-        const documents = await path.documentDir()
-        localStorage.setItem("basePath", documents)
-        projectsToShow = await refreshProjects(documents)
-    }
+    const translate = (key) => Localization.HOME[key]
+    const internalID = v4()
 
     onMount(() => {
         ContextMenuController.mount(
             {
                 icon: "view_in_ar",
-                label: Localization.HOME.HOME.LABEL_PROJECTS
+                label: Localization.HOME.LABEL_PROJECTS
             },
             [
                 {
                     icon: "delete_forever",
                     label: "Delete",
                     onClick: async () => {
-                        await fs.readDir(await path.resolve(localStorage.getItem("basePath") + "projects" + path.sep + selected), {recursive: true})
+                        await NodeFS.rm(NodeFS.resolvePath(localStorage.getItem(BASE_PATH) + NodeFS.sep + selected), {
+                            recursive: true,
+                            force: true
+                        })
                         projectsToShow = projectsToShow.filter(e => e.id !== selected)
                     }
                 },
                 {
                     icon: "folder",
                     label: "Open in explorer",
-                    onClick: async () => shell.open(localStorage.getItem("basePath") + "projects" + path.sep + selected)
+                    onClick: async () => shell.showItemInFolder(localStorage.getItem(BASE_PATH) + NodeFS.sep + selected)
                 },
             ],
             internalID,
             ["data-card"]
         )
-        load()
-
+        if (!localStorage.getItem(BASE_PATH))
+            localStorage.setItem(BASE_PATH, NodeFS.rootDir)
+        refreshProjects().then(r => projectsToShow = r).catch()
     })
 
     onDestroy(() => ContextMenuController.destroy(internalID))
-    $: {
-        console.log(projectsToShow)
-        if (searchString)
-            filtered = projectsToShow.filter(p => p.meta.name && p.meta.name.toLowerCase().includes(searchString.toLowerCase()))
-        else
-            filtered = [...projectsToShow]
-    }
+
+
 </script>
 
 
 <Header
-
+        translate={translate}
         setSearchString={v => searchString = v}
         searchString={searchString}
         projectsToShow={projectsToShow}
         setProjectsToShow={v => projectsToShow = v}
 />
-{#if filtered.length === 0}
-    <div class="empty-wrapper">
-        <Icon styles="font-size: 100px; color: #999;">folder</Icon>
-        {translate("EMPTY")}
-    </div>
-{:else}
+
     <div
             class="content"
             id={internalID}
@@ -98,30 +79,36 @@
                     selected = found[0]
             }}
     >
-        {#each filtered as p}
+        <List
+                let:item
+                getLabel={e => e.meta.name}
+                items={projectsToShow}
+                favoriteKey={PROJECT_FILE_EXTENSION}
+                getID={e => e.id}
+        >
             <ProjectRow
                     selected={selected}
-                    openProjects={openProjects}
-                    open={() => openProject(p)}
-                    data={p}
+                    open={() => {
+                      ipcRenderer.send("open-project", item)
+                    }}
+                    data={item}
                     onRename={async newName => {
-                        const pathName =await path.resolve(localStorage.getItem("basePath") + "projects" + path.sep + p.id + path.sep + ".meta")
-                        const data = await readFile(pathName)
-                        await fs.writeFile(pathName, JSON.stringify({
-                            ...JSON.parse(data),
+                        const pathName = pathLib.resolve(localStorage.getItem(BASE_PATH) + NodeFS.sep + item.id + NodeFS.sep + PROJECT_FILE_EXTENSION)
+                        const res = await NodeFS.read(pathName)
+                        if (!res)
+                            return
+                        await NodeFS.write(pathName, JSON.stringify({
+                            ...JSON.parse(res.toString()),
                             name: newName
                         }))
                         projectsToShow = projectsToShow
                     }}
             />
-        {/each}
+        </List>
     </div>
-{/if}
 
 
 <style>
-
-
     .content {
         display: flex;
         flex-direction: column;
@@ -132,21 +119,5 @@
         overflow-x: hidden;
         overflow-y: auto;
         height: 100%;
-
     }
-
-    .empty-wrapper {
-        color: #999 !important;
-        display: grid;
-        justify-content: center;
-        justify-items: center;
-        width: 100%;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        font-weight: 550;
-        font-size: 0.8rem;
-    }
-
 </style>

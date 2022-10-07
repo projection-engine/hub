@@ -1,63 +1,60 @@
 <script>
 
-    import Input from "../shared/components/input/Input.svelte";
-    import Icon from "../shared/components/icon/Icon.svelte";
+    import Input from "../../shared/frontend/components/input/Input.svelte";
+    import Icon from "../../shared/frontend/components/icon/Icon.svelte";
     import {onDestroy, onMount} from "svelte";
-    import createPortal from "../shared/libs/create-portal";
-    import Localization from "../shared/libs/Localization";
-    import {fs, path} from "@tauri-apps/api";
+    import createPortal from "../../shared/frontend/components/create-portal";
     import {v4} from "uuid";
+    import NodeFS from "../../shared/frontend/libs/NodeFS";
+    import PROJECT_FILE_EXTENSION from "../../shared/PROJECT_FILE_EXTENSION";
+    import BASE_PATH from "../BASE_PATH";
+
 
     export let setProjectsToShow
     export let projectsToShow
     export let setSearchString
     export let searchString
+    export let translate
 
-    const translate = (key) => Localization.HOME.HOME[key]
-
+    let openInput = false
     let modal
     let input = ""
-
-    async function createProject() {
+    const create = async (name = translate("PROJECT_NAME")) => {
         const projectID = v4()
-        const pathToProject = localStorage.getItem("basePath") + path.sep + projectID
-        await fs.createDir(pathToProject)
+        const projectPath = localStorage.getItem(BASE_PATH) + NodeFS.sep + projectID
+        if (!(await NodeFS.exists(NodeFS.resolvePath(localStorage.getItem(BASE_PATH))))) {
+            alert.pushAlert("Directory not found, creating on root directory.")
+            localStorage.setItem(BASE_PATH, NodeFS.rootDir)
+        }
 
+        const err = await NodeFS.mkdir(projectPath)
+        if (!err)
+            await NodeFS.write(NodeFS.resolvePath(projectPath + NodeFS.sep + PROJECT_FILE_EXTENSION), JSON.stringify({
+                id: projectID, name, creationDate: new Date().toDateString()
+            }))
 
-        await fs.writeFile(
-            pathToProject + path.sep + ".meta",
-            JSON.stringify({
-                    id: projectID,
-                    name,
-                    creationDate: new Date().toDateString()
-                })
-        )
-
-        return projectID
-    }
-
-    const create = async (name) => {
-        const res = await createProject()
         setProjectsToShow([
             ...projectsToShow,
             {
-                id: res,
-                meta: {name, creationDate: (new Date()).toLocaleDateString()}
+                id: projectID,
+                meta: {name: name, creationDate: (new Date()).toLocaleDateString()},
+                path: NodeFS.resolvePath(localStorage.getItem(BASE_PATH) + NodeFS.sep + projectID)
             }
         ])
 
         alert.pushAlert(translate("PROJECT_CREATED"), "success")
-        portal.close()
+        openInput = false
         input = ""
     }
 
     function handler(event) {
         if (!modal.firstChild.contains(event.target))
-            portal.close()
+            openInput = false
+
     }
 
     const portal = createPortal(999)
-
+    $: openInput ? portal.open() : portal.close()
     onMount(() => {
         portal.create(modal, {backdropFilter: "blur(2px)"})
         document.addEventListener("mousedown", handler)
@@ -70,23 +67,9 @@
 
 
 <div class="wrapper">
-    <div class="title">
-        <div class="header">{translate("PROJECTS")}</div>
-        <Input
-                hasBorder="true"
-                placeholder={translate("SEARCH")}
-                height={"25px"}
-                setSearchString={v =>  setSearchString(v)}
-                onEnter={v =>  setSearchString(v)}
-                onBlur={(_, v) => setSearchString(v)}
-                searchString={searchString}>
-            <Icon slot="icon" styles="font-size: 1rem">
-                search
-            </Icon>
-        </Input>
-    </div>
+    <div class="header">{translate("PROJECTS")}</div>
 
-    <button on:click={() => portal.open()} data-focusbutton="-">
+    <button on:click={() => openInput = !openInput} data-overflow="-" data-focusbutton="-" style="height: 25px">
         <Icon>add</Icon>
         {translate("CREATE")}
     </button>
@@ -108,6 +91,7 @@
         </div>
         <div class="footer">
             <button
+
                     data-focusbutton="-"
                     on:click={() => create(input)}
             >

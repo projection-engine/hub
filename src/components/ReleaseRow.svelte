@@ -1,13 +1,14 @@
 <script>
     import "../css/ProjectRow.css"
-    import Localization from "../shared/libs/Localization";
-    import Icon from "../shared/components/icon/Icon.svelte";
-    import ToolTip from "../shared/components/tooltip/ToolTip.svelte";
+    import Localization from "../Localization";
+    import Icon from "../../shared/frontend/components/icon/Icon.svelte";
+    import ToolTip from "../../shared/frontend/components/tooltip/ToolTip.svelte";
 
+    const {ipcRenderer} = window.require("electron")
     export let release
     export let openRelease
 
-    const translate = (key) => Localization.HOME.HOME[key]
+    const translate = (key) => Localization.HOME[key]
 </script>
 
 <div class={"wrapper card-home"}>
@@ -19,7 +20,9 @@
         <Icon styles="font-size: .9rem">description</Icon>
         <ToolTip content={translate("RELEASE_NOTES")}/>
     </button>
-    <button data-focusbutton="-" disabled="true">
+    <button data-focusbutton="-" on:click={() => {
+        ipcRenderer.send("install-version", {version: release.tag_name, requestPath: release.assets[0].browser_download_url})
+    }}>
         {translate("INSTALL")}
     </button>
 </div>

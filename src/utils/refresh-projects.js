@@ -1,45 +1,42 @@
-import Localization from "../shared/libs/Localization";
-import {fs, path} from "@tauri-apps/api"
-import readFile from "./read-file";
+import Localization from "../Localization";
+import NodeFS from "../../shared/frontend/libs/NodeFS";
+import BASE_PATH from "../BASE_PATH";
+import PROJECT_FILE_EXTENSION from "../../shared/PROJECT_FILE_EXTENSION";
 
-export default async function refreshProjects(pathToRead) {
-    try {
-        const res = await fs.readDir(pathToRead)
-        if (!(await fs.exists(pathToRead))) await fs.createDir(pathToRead)
-        const data = []
-
-        for (let i = 0; i < res.length; i++) {
-            try {
-                const current = res[i]
-                if (!Array.isArray(current.children))
-                    continue
-                const children = await fs.readDir(current.path)
-                console.log(children)
-                if (!children.find(c => c.path.includes(".meta")))
-                    continue
-                let meta = await readFile(current.path + path.sep + ".meta")
-                if(meta)
-                    meta = JSON.parse(meta)
-                const parts = current.path.split(path.sep)
-                data.push({
-                    id: parts.pop(),
-                    meta,
-                    settings: meta ? meta.settings : undefined
-                })
-            } catch (err) {
-                console.error(err)
-                continue
-            }
-        }
-        return data.filter(e => e !== undefined).map(e => {
-            let res = {...e}
-            if (!res.meta) res.meta = {name: Localization.HOME.HOME.CREATE}
-            if (!res.settings) res.settings = {}
-            if (!res.meta.name) res.meta.name = Localization.HOME.HOME.CREATE
-            return res
-        })
-    } catch (err) {
-        console.error(err)
+export default async function refreshProjects() {
+    const path = localStorage.getItem(BASE_PATH)
+    const res = await NodeFS.readdir(path)
+    if (!res)
         return []
+    const data = []
+    for (let i = 0; i < res.length; i++) {
+        const itemPath = path + NodeFS.sep + res[i]
+        const stat = await NodeFS.stat(itemPath)
+        if(!stat.isDirectory)
+            continue
+        const children = await NodeFS.readdir(itemPath)
+        if(!children)
+            continue
+        const metadata = children.find(c => c.includes(PROJECT_FILE_EXTENSION))
+
+        if(!metadata)
+            continue
+        const blob = await NodeFS.read(itemPath + NodeFS.sep  + metadata)
+        const parts = itemPath.split(NodeFS.sep)
+        const parsedMetadata = JSON.parse(blob.toString())
+
+        data.push({
+            id: parts.pop(),
+            meta: {...parsedMetadata, settings: undefined},
+            settings: parsedMetadata?.settings,
+            path: itemPath
+        })
     }
+    return data.filter(e => e !== undefined).map(e => {
+        let res = {...e}
+        if (!res.meta) res.meta = {name: Localization.HOME.CREATE}
+        if (!res.settings) res.settings = {}
+        if (!res.meta.name) res.meta.name = Localization.HOME.CREATE
+        return res
+    })
 }

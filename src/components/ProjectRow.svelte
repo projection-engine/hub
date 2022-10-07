@@ -1,11 +1,11 @@
 <script>
-    import Localization from "../shared/libs/Localization";
-    import Input from "../shared/components/input/Input.svelte";
-    import Icon from "../shared/components/icon/Icon.svelte";
+    import Localization from "../Localization";
+    import Input from "../../shared/frontend/components/input/Input.svelte";
+    import Icon from "../../shared/frontend/components/icon/Icon.svelte";
     import "../css/ProjectRow.css"
+    import ToolTip from "../../shared/frontend/components/tooltip/ToolTip.svelte";
 
-
-    const translate = (key) => Localization.HOME.CARD[key]
+    const translate = (key) => Localization.HOME[key]
 
     export let open
     export let data
@@ -16,8 +16,9 @@
     let changeDate
     let hovered
 
+
     $: {
-        if(data.meta.lastModification) {
+        if (data.meta.lastModification) {
             let a = new Date()
             let b = new Date(a.getTime() - 8.64e+7)
             let c = new Date(data.meta.lastModification)
@@ -40,8 +41,7 @@
                 changeDate = "Yesterday";
             else
                 changeDate = data.meta.lastModification
-        }
-        else
+        } else
             changeDate = translate("NEVER")
     }
 
@@ -50,12 +50,18 @@
 </script>
 
 
-<div style={isSelected ? "border-color: var(--pj-accent-color)" : ""} class="wrapper card-home" data-card={data.id} on:mouseenter={() => hovered = true} on:mouseleave={() => hovered = false}>
-    <div class="info card-home" style="width: 200%; display: flex; justify-content: unset; gap: 4px">
+<div style={isSelected ? "border-color: var(--pj-accent-color)" : ""} class="wrapper card-home" data-card={data.id}
+     on:mouseenter={() => hovered = true} on:mouseleave={() => hovered = false}>
+    <div
+            class="info card-home"
+            style="width: 200%; display: flex; justify-content: unset; gap: 4px"
+            on:dblclick={() => openForChange = true}
+    >
+        <ToolTip content={Localization.HOME.DOUBLE_CLICK}/>
         {#if openForChange}
             <Input
                 placeholder={data.meta.name}
-                searchString= {data.meta.name}
+                searchString={data.meta.name}
                 width="200%"
                 setSearchString={v => {
                     data.meta.name = v
@@ -75,7 +81,10 @@
                 }}
             />
         {:else}
-            <strong>{data.meta.name}</strong>
+            <div class="item-data">
+                <strong>{data.meta.name}</strong>
+                <small>{data.path}</small>
+            </div>
         {/if}
 
     </div>
@@ -85,28 +94,28 @@
         <small>{translate("LAST_MODIFIED")}</small>
     </div>
     <div data-vertdivider="-"></div>
-    <div class={"section card-home"}>
-        <button
-                class="button card-home"
-                on:click={() => openForChange = true}
-        >
-            <Icon>edit</Icon>
-        </button>
-        <button on:click={() => open()} data-focusbutton="-">Open</button>
-    </div>
+
+    <button on:click={() => open()} data-focusbutton="-">Open</button>
 </div>
 
 
 <style>
-    strong{
+    .item-data{
+        display: grid;
+        justify-content: flex-start;
+    }
+    small{
+        font-size: .65rem;
+    }
+    strong {
         font-weight: 550;
     }
 
-    .open-icon > small{
+    .open-icon > small {
         opacity: 0;
     }
 
-    .hovered > small{
+    .hovered > small {
         opacity: 1;
     }
 </style>

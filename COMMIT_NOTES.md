@@ -1,3 +1,3 @@
-- Fixed project creation 
-- Fixed project listing
-- Fixing permissions on tauri conf
+- Rewriting structure
+- New visuals for lists
+- Initializing editor installation structure

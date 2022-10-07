@@ -1,27 +1,32 @@
 <script>
-    import Localization from "./shared/libs/Localization";
-    import Alert from "./shared/components/alert/Alert.svelte";
-    import Sidebar from "./shared/components/Sidebar.svelte";
+    import Localization from "./Localization";
+    import Alert from "../shared/frontend/components/alert/Alert.svelte";
+    import Sidebar from "../shared/frontend/components/Sidebar.svelte";
     import Projects from "./components/Projects.svelte";
-    import ReleasesList from "./components/ReleasesList.svelte";
-    import ResizableBar from "./shared/components/resizable/ResizableBar.svelte";
-    import ContextMenu from "./shared/components/context-menu/ContextMenu.svelte";
+    import ReleasesList from "./components/Releases.svelte";
+    import ContextMenu from "../shared/frontend/components/context-menu/ContextMenu.svelte";
+    import {onMount} from "svelte";
 
     let tab = 0
-    const translate = (key) => Localization.HOME.HOME[key]
+    const translate = (key) => Localization.HOME[key]
+    onMount(() => {
+        console.trace(localStorage.getItem("installed"))
+    })
 </script>
 
+
 <Alert/>
+
 <ContextMenu/>
 <div class="wrapper">
     <Sidebar tab={tab} setTab={v => tab = v} options={[
         ["view_in_ar", translate("PROJECTS")],
         ["inventory_2", translate("RELEASES")]
     ]}/>
-    <ResizableBar type="width"/>
+
     <div class="tab">
         {#if tab === 0}
-            <Projects/>
+            <Projects />
         {:else}
             <ReleasesList/>
         {/if}
