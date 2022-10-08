@@ -1,12 +1,12 @@
 <script>
     import Localization from "./Localization";
-    import Alert from "../shared/frontend/components/alert/Alert.svelte";
-    import Sidebar from "../shared/frontend/components/Sidebar.svelte";
+    import Alert from "shared-resources/frontend/components/alert/Alert.svelte";
+    import Sidebar from "shared-resources/frontend/components/Sidebar.svelte";
     import Projects from "./components/Projects.svelte";
     import ReleasesList from "./components/Releases.svelte";
-    import ContextMenu from "../shared/frontend/components/context-menu/ContextMenu.svelte";
-    import {onDestroy, onMount} from "svelte";
-    import createPortal from "../shared/frontend/components/create-portal";
+    import ContextMenu from "shared-resources/frontend/components/context-menu/ContextMenu.svelte";
+    import {onMount} from "svelte";
+
     import Downloads from "./components/Downloads.svelte";
 
     const {ipcRenderer} = window.require("electron")

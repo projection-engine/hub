@@ -2394,11 +2394,6 @@ map-age-cleaner@^0.1.1:
   dependencies:
     p-defer "^1.0.0"
 
-marked@^4.1.0:
-  version "4.1.1"
-  resolved "https://registry.yarnpkg.com/marked/-/marked-4.1.1.tgz#2f709a4462abf65a283f2453dc1c42ab177d302e"
-  integrity sha512-0cNMnTcUJPxbA6uWmCmjWz4NJRe/0Xfk2NhXCUHjew9qJzFN20krFnsUe7QynwqOwa5m1fZ4UDg0ycKFVC0ccw==
-
 matcher@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/matcher/-/matcher-3.0.0.tgz#bd9060f4c5b70aa8041ccc6f80368760994f30ca"
@@ -3359,6 +3354,10 @@ set-blocking@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/set-blocking/-/set-blocking-2.0.0.tgz#045f9782d011ae9a6803ddd382b24392b3d890f7"
   integrity sha512-KiKBS8AnWGEyLzofFfmvKwpdPzqiy16LvQfK3yv/fVH7Bj13/wl3JSR1J+rfgRE9q7xUJK4qvgS8raSOeLUehw==
+
+"shared-resources@https://github.com/projection-engine/shared-resources.git":
+  version "0.0.0"
+  resolved "https://github.com/projection-engine/shared-resources.git#fe4f4156bd2fc37e2dc78d17efbd108cd67a1f8c"
 
 shebang-command@^1.2.0:
   version "1.2.0"

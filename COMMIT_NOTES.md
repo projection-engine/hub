@@ -1,11 +1,1 @@
-- File download 
-- Downloads modal
-- Progress indicator for downloads
-- File decompression
-- Open editor ipc endpoint
-- Serialization of sidebar state
-- Serialization of list state
-- Improvements to releases tab
-- Default version
-- Default directory
-- Directory selection
+- Integrating with shared-resources repository

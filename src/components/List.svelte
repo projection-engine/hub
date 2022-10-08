@@ -1,9 +1,9 @@
 <script>
-    import Icon from "../../shared/frontend/components/icon/Icon.svelte";
+    import Icon from "shared-resources/frontend/components/icon/Icon.svelte";
     import {onMount} from "svelte";
     import Localization from "../Localization";
-    import ToolTip from "../../shared/frontend/components/tooltip/ToolTip.svelte";
-    import Input from "../../shared/frontend/components/input/Input.svelte";
+    import ToolTip from "shared-resources/frontend/components/tooltip/ToolTip.svelte";
+    import Input from "shared-resources/frontend/components/input/Input.svelte";
 
     export let items
     export let filterCallback

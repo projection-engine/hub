@@ -1,7 +1,7 @@
 import Localization from "../Localization";
-import NodeFS from "../../shared/frontend/libs/NodeFS";
-import BASE_PATH from "../BASE_PATH";
-import PROJECT_FILE_EXTENSION from "../../shared/PROJECT_FILE_EXTENSION";
+import NodeFS from "shared-resources/frontend/libs/NodeFS";
+
+import PROJECT_FILE_EXTENSION from "shared-resources/PROJECT_FILE_EXTENSION";
 
 export default async function refreshProjects(path) {
 

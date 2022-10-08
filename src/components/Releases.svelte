@@ -1,8 +1,6 @@
 <script>
     import {onMount} from "svelte";
-    import Icon from "../../shared/frontend/components/icon/Icon.svelte";
     import Localization from "../Localization";
-    import Input from "../../shared/frontend/components/input/Input.svelte";
     import ReleaseRow from "./ReleaseRow.svelte";
 
     import List from "./List.svelte";

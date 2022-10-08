@@ -1,11 +1,9 @@
 <script>
-
-    import Input from "../../shared/frontend/components/input/Input.svelte";
-    import Icon from "../../shared/frontend/components/icon/Icon.svelte";
+    import Icon from "shared-resources/frontend/components/icon/Icon.svelte";
     import {onDestroy, onMount} from "svelte";
-    import createPortal from "../../shared/frontend/components/create-portal";
+    import createPortal from "shared-resources/frontend/components/create-portal";
     import BASE_PATH from "../BASE_PATH";
-    import ToolTip from "../../shared/frontend/components/tooltip/ToolTip.svelte";
+    import ToolTip from "shared-resources/frontend/components/tooltip/ToolTip.svelte";
     import CreateProject from "./CreateProject.svelte";
 
     const {ipcRenderer} = window.require("electron")

@@ -1,5 +1,6 @@
 import findExecutable from "./find-executable";
-import readdir from "../../../shared/backend/utils/readdir";
+import readdir from "shared-resources/backend/utils/readdir";
+import PROJECT_FILE_EXTENSION from "shared-resources/PROJECT_FILE_EXTENSION";
 
 const path = require("path");
 const fs = require("fs")
@@ -10,16 +11,17 @@ export default async function openProject(event, data, installPath) {
     if (!fs.existsSync(versionPath))
         return
     const children = (await readdir(versionPath))[1]
-    if(!children)
+    if (!children)
         return
     try {
-        console.log(children)
+
         const pathToFiles = versionPath + path.sep + children.find(e => !e.includes("."))
         const file = findExecutable(pathToFiles, ".exe")
-        console.log(file, pathToFiles)
+
         if (!file)
             return
-        process.env.PROJECT_TO_OPEN = data.path
+        process.env.PROJECT_TO_OPEN = data.path + path.sep + PROJECT_FILE_EXTENSION
+
         childProcess.execFile(file, (err, data) => {
             if (err) {
                 console.error(err);

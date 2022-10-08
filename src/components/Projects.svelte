@@ -1,15 +1,14 @@
 <script>
     import Header from "./Header.svelte";
-    import Icon from "../../shared/frontend/components/icon/Icon.svelte";
     import Localization from "../Localization";
     import {onDestroy, onMount} from "svelte";
-    import NodeFS from "../../shared/frontend/libs/NodeFS";
+    import NodeFS from "shared-resources/frontend/libs/NodeFS";
     import refreshProjects from "../utils/refresh-projects";
     import ProjectRow from "./ProjectRow.svelte";
     import {v4} from "uuid";
-    import ContextMenuController from "../../shared/frontend/libs/ContextMenuController";
+    import ContextMenuController from "shared-resources/frontend/libs/ContextMenuController";
     import BASE_PATH from "../BASE_PATH";
-    import PROJECT_FILE_EXTENSION from "../../shared/PROJECT_FILE_EXTENSION";
+    import PROJECT_FILE_EXTENSION from "shared-resources/PROJECT_FILE_EXTENSION";
     import List from "./List.svelte";
 
     const pathLib = window.require("path")

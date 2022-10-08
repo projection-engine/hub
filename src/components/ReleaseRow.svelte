@@ -1,8 +1,8 @@
 <script>
     import "../css/ProjectRow.css"
     import Localization from "../Localization";
-    import ToolTip from "../../shared/frontend/components/tooltip/ToolTip.svelte";
-    import Icon from "../../shared/frontend/components/icon/Icon.svelte";
+    import ToolTip from "shared-resources/frontend/components/tooltip/ToolTip.svelte";
+    import Icon from "shared-resources/frontend/components/icon/Icon.svelte";
 
     const {ipcRenderer, shell} = window.require("electron")
     export let release

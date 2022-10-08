@@ -1,6 +1,6 @@
 {
   "name": "projection-engine-hub",
-  "version": "1.0.0-alpha",
+  "version": "1.0.0-beta",
   "main": "public/build/electron.js",
   "scripts": {
     "start": "concurrently \"yarn svelte-dev\" \"electron-forge start\"",
@@ -18,7 +18,7 @@
     "decompress": "^4.2.1",
     "electron-dl": "^3.3.1",
     "electron-squirrel-startup": "^1.0.0",
-
+    "shared-resources": "https://github.com/projection-engine/shared-resources.git",
     "uuid": "^8.3.2"
   },
   "devDependencies": {

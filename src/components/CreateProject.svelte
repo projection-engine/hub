@@ -1,10 +1,10 @@
 <script>
-    import Input from "../../shared/frontend/components/input/Input.svelte";
-    import Icon from "../../shared/frontend/components/icon/Icon.svelte";
+    import Input from "shared-resources/frontend/components/input/Input.svelte";
+    import Icon from "shared-resources/frontend/components/icon/Icon.svelte";
     import {v4} from "uuid";
     import BASE_PATH from "../BASE_PATH";
-    import NodeFS from "../../shared/frontend/libs/NodeFS";
-    import PROJECT_FILE_EXTENSION from "../../shared/PROJECT_FILE_EXTENSION";
+    import NodeFS from "shared-resources/frontend/libs/NodeFS";
+    import PROJECT_FILE_EXTENSION from "shared-resources/PROJECT_FILE_EXTENSION";
 
     export let translate
     export let close

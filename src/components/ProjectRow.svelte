@@ -1,9 +1,9 @@
 <script>
     import Localization from "../Localization";
-    import Input from "../../shared/frontend/components/input/Input.svelte";
-    import Icon from "../../shared/frontend/components/icon/Icon.svelte";
+    import Input from "shared-resources/frontend/components/input/Input.svelte";
+    import Icon from "shared-resources/frontend/components/icon/Icon.svelte";
     import "../css/ProjectRow.css"
-    import ToolTip from "../../shared/frontend/components/tooltip/ToolTip.svelte";
+    import ToolTip from "shared-resources/frontend/components/tooltip/ToolTip.svelte";
 
     const translate = (key) => Localization.HOME[key]
 

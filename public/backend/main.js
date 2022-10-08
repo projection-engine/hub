@@ -1,15 +1,15 @@
+import rm from "shared-resources/backend/utils/rm"
+import fileSystem from "shared-resources/backend/file-system"
+
 const {BrowserWindow, dialog, ipcMain, screen} = require('electron');
-const FSEvents = require("../../shared/backend/file-system");
+
 const path = require("path");
 const startEvents = require("./utils/start-events");
 const readInstalledVersions = require("./utils/read-installed-versions");
-const rm = require("../../shared/backend/utils/rm");
 const INSTALL_PATH = require("./static/INSTALL_PATH");
 const fs = require("fs")
 const downloadFile = require("./utils/download-file");
-const childProcess = require("child_process");
 const decompress = require("decompress");
-const findExecutable = require("./utils/find-executable");
 const openProject = require("./utils/open-project");
 
 async function updateInstalls(win) {
@@ -17,7 +17,7 @@ async function updateInstalls(win) {
 }
 
 async function createEnvironment() {
-    FSEvents()
+    fileSystem()
 
     const primaryDisplay = screen.getPrimaryDisplay()
     const {width, height} = primaryDisplay.workAreaSize

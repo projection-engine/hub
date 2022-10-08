@@ -8,6 +8,7 @@ import json from "@rollup/plugin-json";
 import {uglify} from "rollup-plugin-uglify";
 
 const PRODUCTION = !process.env.ROLLUP_WATCH;
+
 export default [
     {
         input: "public/backend/main.js",

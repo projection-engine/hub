@@ -1,8 +1,8 @@
 <script>
     import {onDestroy, onMount} from "svelte";
-    import createPortal from "../../shared/frontend/components/create-portal";
+    import createPortal from "shared-resources/frontend/components/create-portal";
     import Localization from "../Localization";
-    import Icon from "../../shared/frontend/components/icon/Icon.svelte";
+    import Icon from "shared-resources/frontend/components/icon/Icon.svelte";
 
     export let open
     export let progress
