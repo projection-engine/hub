@@ -1,3 +1,11 @@
-- Rewriting structure
-- New visuals for lists
-- Initializing editor installation structure
+- File download 
+- Downloads modal
+- Progress indicator for downloads
+- File decompression
+- Open editor ipc endpoint
+- Serialization of sidebar state
+- Serialization of list state
+- Improvements to releases tab
+- Default version
+- Default directory
+- Directory selection

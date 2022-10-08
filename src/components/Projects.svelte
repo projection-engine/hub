@@ -15,16 +15,19 @@
     const pathLib = window.require("path")
     const os = window.require("os")
     const {ipcRenderer, shell} = window.require("electron")
-
+    let basePath
     let searchString = ""
     let projectsToShow = []
-
+    let currentVersion
     let selected
+    let defaultVersion
 
     const translate = (key) => Localization.HOME[key]
     const internalID = v4()
 
     onMount(() => {
+        defaultVersion = localStorage.getItem("CURRENT_VERSION")
+        currentVersion = localStorage.getItem("CURRENT_VERSION")
         ContextMenuController.mount(
             {
                 icon: "view_in_ar",
@@ -53,16 +56,22 @@
         )
         if (!localStorage.getItem(BASE_PATH))
             localStorage.setItem(BASE_PATH, NodeFS.rootDir)
-        refreshProjects().then(r => projectsToShow = r).catch()
+        basePath = localStorage.getItem(BASE_PATH)
+
     })
-
+    $: {
+        if (basePath)
+            refreshProjects(basePath).then(r => projectsToShow = r).catch()
+    }
     onDestroy(() => ContextMenuController.destroy(internalID))
-
 
 </script>
 
 
 <Header
+        defaultVersion={defaultVersion}
+        basePath={basePath}
+        setBasePath={v => basePath = v}
         translate={translate}
         setSearchString={v => searchString = v}
         searchString={searchString}
@@ -70,42 +79,58 @@
         setProjectsToShow={v => projectsToShow = v}
 />
 
-    <div
-            class="content"
-            id={internalID}
-            on:mousedown={e => {
-                const found = document.elementsFromPoint(e.clientX, e.clientY).map(e => e.getAttribute("data-card")).filter(e => e != null)
-                if(found != null)
-                    selected = found[0]
-            }}
+<div
+        class="content"
+        id={internalID}
+        on:mousedown={e => {
+            const found = document.elementsFromPoint(e.clientX, e.clientY).map(e => e.getAttribute("data-card")).filter(e => e != null)
+            if(found != null)
+                selected = found[0]
+        }}
+>
+    <List
+            let:item
+            getLabel={e => e.meta.name}
+            items={projectsToShow}
+            favoriteKey={PROJECT_FILE_EXTENSION}
+            getID={e => e.id}
     >
-        <List
-                let:item
-                getLabel={e => e.meta.name}
-                items={projectsToShow}
-                favoriteKey={PROJECT_FILE_EXTENSION}
-                getID={e => e.id}
-        >
-            <ProjectRow
-                    selected={selected}
-                    open={() => {
-                      ipcRenderer.send("open-project", item)
+        <ProjectRow
+                updateVersion={async _ => {
+                        await NodeFS.write(
+                            item.path + NodeFS.sep + PROJECT_FILE_EXTENSION,
+                         JSON.stringify({
+                            ...item.meta,
+                            version: defaultVersion
+                        }))
+                        item.meta.version = defaultVersion
+                        projectsToShow = projectsToShow
                     }}
-                    data={item}
-                    onRename={async newName => {
+                defaultVersion={defaultVersion}
+                selected={selected}
+                open={() => {
+                    if(item.meta.version !== defaultVersion){
+                        alert.pushAlert("Project version is not installed.")
+                    }else
+                        ipcRenderer.send("open-project", {path: item.path, version: defaultVersion})
+                }}
+                data={item}
+                onRename={async newName => {
                         const pathName = pathLib.resolve(localStorage.getItem(BASE_PATH) + NodeFS.sep + item.id + NodeFS.sep + PROJECT_FILE_EXTENSION)
                         const res = await NodeFS.read(pathName)
                         if (!res)
                             return
-                        await NodeFS.write(pathName, JSON.stringify({
+                        await NodeFS.write(
+                            pathName,
+                         JSON.stringify({
                             ...JSON.parse(res.toString()),
                             name: newName
                         }))
                         projectsToShow = projectsToShow
                     }}
-            />
-        </List>
-    </div>
+        />
+    </List>
+</div>
 
 
 <style>

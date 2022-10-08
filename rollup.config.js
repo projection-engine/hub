@@ -19,9 +19,9 @@ export default [
         },
         plugins: [
             resolve({
-                dedupe: ["electron"]
+                dedupe: ["electron", "decompress"]
             }),
-            commonjs({ignore: ["electron"]}),
+            commonjs({ignore: ["electron", "decompress"]}),
             json(),
             uglify()
         ]

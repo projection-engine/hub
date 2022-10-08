@@ -4,6 +4,7 @@
     import ResizableBar from "./resizable/ResizableBar.svelte";
     import ToolTip from "./tooltip/ToolTip.svelte";
     import logo from "../../APP_LOGO.png"
+    import {onMount} from "svelte";
 
     const THRESHOLD = 65
     const {shell} = window.require("electron")
@@ -13,31 +14,69 @@
     export let options
 
     let hidden = true
+
+    let initialized = false
+    $:{
+        if (initialized)
+            localStorage.setItem("TABS_CACHE", tab)
+    }
+    onMount(() => {
+        const n = parseInt(localStorage.getItem("TABS_CACHE"))
+        if (!isNaN(n))
+            setTab(n)
+        initialized = true
+    })
 </script>
 
 <div class="wrapper" style={hidden ? "width: 50px;" : undefined}>
     {#each options as op, i}
-        <button class="button" class:active={tab === i} on:click={() => setTab(i)} class:hidden={hidden}>
-            <Icon styles="font-size: .9rem">{op[0]}</Icon>
-            {#if !hidden}
-                {op[1]}
-            {/if}
-            <ToolTip content={op[1]}/>
-        </button>
-    {/each}
-
-    <div
-            class="button"
-            style={"cursor: alias; padding: 8px; margin-top: auto;" + (hidden ? "justify-content: center;" : "justify-content: space-between;")}
-            on:click={() => shell.openExternal("https://github.com/projection-engine")}
-    >
-        <img src={logo} alt="logo"/>
-        {#if !hidden}
-            <small>{Localization.COMPONENTS.ABOUT.VERSION}</small>
+        {#if op[2] !== "bottom"}
+            <button
+                    class="button"
+                    class:active={tab === i}
+                    on:click={() => setTab(i)}
+                    class:hidden={hidden}
+            >
+                <Icon styles="font-size: .9rem">{op[0]}</Icon>
+                {#if !hidden}
+                    {op[1]}
+                {/if}
+                <ToolTip content={op[1]}/>
+            </button>
         {/if}
-        <ToolTip content={Localization.COMPONENTS.ABOUT.VERSION}/>
+    {/each}
+    <div class="bottom-content">
+        {#each options as op, i}
+            {#if op[2] === "bottom"}
+                <button
+                        data-highlight={op[3] ? "-" : undefined}
+                        class="button"
+                        class:active={tab === i}
+                        on:click={() => setTab(i)}
+                        class:hidden={hidden}
+                >
+                    <Icon styles="font-size: .9rem">{op[0]}</Icon>
+                    {#if !hidden}
+                        {op[1]}
+                    {/if}
+                    <ToolTip content={op[1]}/>
+                </button>
+            {/if}
+        {/each}
+        <div
+                class="button"
+                style={"cursor: alias; padding: 8px;" + (hidden ? "justify-content: center;" : "justify-content: space-between;")}
+                on:click={() => shell.openExternal("https://github.com/projection-engine")}
+        >
+            <img src={logo} alt="logo"/>
+            {#if !hidden}
+                <small>{Localization.COMPONENTS.ABOUT.VERSION}</small>
+            {/if}
+            <ToolTip content={Localization.COMPONENTS.ABOUT.VERSION}/>
+        </div>
     </div>
 </div>
+
 <ResizableBar
         type="width"
         onResizeEnd={(_, ref) => {
@@ -50,6 +89,14 @@
 />
 
 <style>
+    .bottom-content {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        gap: 4px;
+        height: 100%;
+    }
+
     small {
         font-size: .65rem
     }
@@ -65,7 +112,7 @@
 
         gap: 4px;
         background: var(--pj-background-secondary);
-        /*border-right: var(--pj-border-primary) 1px solid;*/
+
         overflow: hidden;
     }
 
@@ -75,7 +122,8 @@
         gap: 4px;
 
         width: 100%;
-        height: 35px;
+        min-height: 35px;
+        max-height: 35px;
 
         border: none;
         border-radius: 5px;
@@ -88,7 +136,7 @@
         cursor: pointer;
     }
 
-    .button:hover,     .active {
+    .button:hover, .active {
         color: var(--pj-color-primary) !important;
         background: var(--pj-background-primary);
     }

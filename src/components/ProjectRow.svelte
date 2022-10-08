@@ -11,6 +11,8 @@
     export let data
     export let onRename
     export let selected
+    export let defaultVersion
+    export let updateVersion
 
     $: isSelected = selected === data.id
     let changeDate
@@ -60,21 +62,21 @@
         <ToolTip content={Localization.HOME.DOUBLE_CLICK}/>
         {#if openForChange}
             <Input
-                placeholder={data.meta.name}
-                searchString={data.meta.name}
-                width="200%"
-                setSearchString={v => {
+                    placeholder={data.meta.name}
+                    searchString={data.meta.name}
+                    width="200%"
+                    setSearchString={v => {
                     data.meta.name = v
                     onRename(v)
                 }}
-                onBlur={(changed, v) => {
+                    onBlur={(changed, v) => {
                     if(changed){
                        onRename(v)
                        data.meta.name = v
                     }
                    openForChange = false
                 }}
-                onEnter={v => {
+                    onEnter={v => {
                     data.meta.name = v
                     openForChange = false
                     onRename(v)
@@ -89,24 +91,42 @@
 
     </div>
 
-    <div class={"info card-home"} style="justify-content: flex-end; justify-items: flex-end">
-        <strong>{changeDate}</strong>
-        <small>{translate("LAST_MODIFIED")}</small>
+    <div class="content">
+        {#if data.meta.version}
+            <small>{data.meta.version}</small>
+        {:else if defaultVersion != null}
+            <button
+                    class="button"
+                    disabled={!defaultVersion}
+                    on:click={updateVersion}
+            >
+                <Icon styles="color: orange; font-size: .9rem">
+                    info
+                    <ToolTip content={translate("NO_VERSION_USING_DEFAULT")}/>
+                </Icon>
+            </button>
+        {/if}
+        <div data-vertdivider="-"></div>
+        <div class={"info card-home"} style="text-align: right" data-overflow="-">
+            <strong>{changeDate}</strong>
+            <small>{translate("LAST_MODIFIED")}</small>
+        </div>
+        <div data-vertdivider="-"></div>
+        <button disabled={!defaultVersion} on:click={() => open()} data-focusbutton="-">Open</button>
     </div>
-    <div data-vertdivider="-"></div>
-
-    <button on:click={() => open()} data-focusbutton="-">Open</button>
 </div>
 
 
 <style>
-    .item-data{
+    .item-data {
         display: grid;
         justify-content: flex-start;
     }
-    small{
+
+    small {
         font-size: .65rem;
     }
+
     strong {
         font-weight: 550;
     }
@@ -117,5 +137,22 @@
 
     .hovered > small {
         opacity: 1;
+    }
+
+    .content {
+        margin-left: 8px;
+        width: fit-content;
+        display: flex;
+        align-items: center;
+        gap: 2px;
+        justify-content: flex-end;
+        justify-items: flex-end;
+    }
+
+    .button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
     }
 </style>

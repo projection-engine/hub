@@ -3,8 +3,8 @@ import NodeFS from "../../shared/frontend/libs/NodeFS";
 import BASE_PATH from "../BASE_PATH";
 import PROJECT_FILE_EXTENSION from "../../shared/PROJECT_FILE_EXTENSION";
 
-export default async function refreshProjects() {
-    const path = localStorage.getItem(BASE_PATH)
+export default async function refreshProjects(path) {
+
     const res = await NodeFS.readdir(path)
     if (!res)
         return []

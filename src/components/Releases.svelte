@@ -4,13 +4,15 @@
     import Localization from "../Localization";
     import Input from "../../shared/frontend/components/input/Input.svelte";
     import ReleaseRow from "./ReleaseRow.svelte";
-    import ReleaseInfo from "./ReleaseInfo.svelte";
+
     import List from "./List.svelte";
 
+    export let installedReleases = []
     let searchString = ""
-
     let releases = []
+    let defaultVersion
     onMount(() => {
+        defaultVersion = localStorage.getItem("CURRENT_VERSION")
         fetch("https://api.github.com/repos/projection-engine/editor/releases", {method: "get"})
             .then(async res => {
                 releases = await res.json()
@@ -22,41 +24,31 @@
     })
 
     const translate = (key) => Localization.HOME[key]
-    let openRelease
+
 </script>
 
-<div class="header-wrapper" style={openRelease != null ? "gap: 8px; justify-content: flex-start" : undefined}>
-    {#if openRelease != null}
-        <button on:click={() => openRelease = undefined} class="button">
-            <Icon>arrow_back</Icon>
-        </button>
-    {/if}
+<div class="header-wrapper">
     <div class="header">{translate("RELEASES")}</div>
 </div>
-{#if !openRelease}
 
-    <List
-            let:item
-            getLabel={e => e.tag_name}
-            items={releases}
-            favoriteKey={"RELEASES"}
-            getID={e => e.tag_name}
-    >
-        <ReleaseRow release={item} openRelease={() => openRelease = item}/>
-    </List>
-{:else}
-    <ReleaseInfo release={openRelease} close={() => openRelease = undefined}/>
-{/if}
+
+<List
+        let:item
+        getLabel={e => e.tag_name}
+        items={releases}
+        favoriteKey={"RELEASES"}
+        getID={e => e.tag_name}
+>
+    <ReleaseRow
+            defaultVersion={defaultVersion}
+            setDefaultVersion={v => defaultVersion = v}
+            installedReleases={installedReleases}
+            release={item}
+    />
+</List>
+
 
 <style>
-    .button {
-
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border: none;
-    }
-
     .header {
         font-weight: 550;
         font-size: 1.5rem;

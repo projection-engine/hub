@@ -14,8 +14,14 @@
     let favoriteFilter = false
     let favorites = {}
     let filter = ""
-
+    let initialized = false
+    $:{
+        if (initialized)
+            localStorage.setItem(favoriteKey + "CACHE", favoriteFilter ? "0" : "1")
+    }
     onMount(() => {
+        favoriteFilter = localStorage.getItem(favoriteKey + "CACHE") === "0"
+        initialized = true
         const f = localStorage.getItem(favoriteKey)
         if (f)
             favorites = JSON.parse(f)
@@ -89,6 +95,7 @@
                 hasBorder="true"
                 placeholder={Localization.HOME.SEARCH}
                 onEnter={v => filter = v}
+                setSearchString={v => filter = v}
                 height="30px"
                 onBlur={(_, v) => filter = v}
                 searchString={filter}>
