@@ -8,6 +8,7 @@
     import {onMount} from "svelte";
 
     import Downloads from "./components/Downloads.svelte";
+    import updateApp from "./utils/update-app";
 
     const {ipcRenderer} = window.require("electron")
     let tab = 0
@@ -17,10 +18,10 @@
         size: -1
     }
     let downloadTabOpen = false
-    let installedReleases
+    let installedReleases = []
     const translate = (key) => Localization.HOME[key]
-    onMount(() => {
 
+    onMount(() => {
         ipcRenderer.on("download-progress", (event, progress) => {
             console.log(progress)
             if (progress.percent * 100 >= 100 && downloadProgress.progress > -1) {
@@ -38,7 +39,7 @@
             downloadProgress = {
                 ...downloadProgress,
                 progress: progress.percent * 100,
-                size: (progress.totalBytes /1e+6).toFixed(2)
+                size: (progress.totalBytes / 1e+6).toFixed(2)
             }
             if (!downloadTabOpen)
                 downloadTabOpen = true
@@ -46,10 +47,10 @@
         ipcRenderer.send("releases-update")
         setInterval(() => ipcRenderer.send("releases-update"), 1000)
         ipcRenderer.on("releases-update", (event, data) => {
-
-            installedReleases = data
-            if (data.length === 0) {
-                alert.pushAlert(translate("NO_VERSION_INSTALLED"), 7000)
+            if (Array.isArray(data))
+                installedReleases = data
+            if (!data || data.length === 0) {
+                alert.pushAlert(translate("NO_VERSION_INSTALLED"), "error", undefined, 7000)
                 tab = 1
             }
         })
@@ -66,14 +67,21 @@
     <Sidebar
             tab={tab}
             setTab={v => {
-                if(v > 1)
+                if(v === 3)
                     downloadTabOpen = !downloadTabOpen
-                else
+                else if(v < 2)
                     tab = v
+                else
+                    updateApp().catch()
             }}
             options={[
                 ["view_in_ar", translate("PROJECTS")],
                 ["inventory_2", translate("RELEASES")],
+                [
+                    "update",
+                    translate("CHECK_UPDATE_HUB"),
+                    "bottom"
+                ],
                 ["file_download", translate("TOGGLE_DOWNLOADS"), "bottom", downloadTabOpen]
             ]}
     />

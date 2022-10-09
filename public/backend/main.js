@@ -1,6 +1,7 @@
 import rm from "shared-resources/backend/utils/rm"
 import fileSystem from "shared-resources/backend/file-system"
 import contextMenuController from "shared-resources/backend/context-menu-controller";
+import autoUpdateListener from "./utils/auto-update-listener";
 
 const {BrowserWindow, dialog, ipcMain, screen} = require('electron');
 
@@ -12,6 +13,7 @@ const fs = require("fs")
 const downloadFile = require("./utils/download-file");
 const decompress = require("decompress");
 const openProject = require("./utils/open-project");
+
 
 async function updateInstalls(win) {
     win.webContents.send("releases-update", (await readInstalledVersions())[1])
@@ -38,6 +40,7 @@ async function createEnvironment() {
         icon: path.resolve(__dirname, "../APP_LOGO.png"),
     });
     contextMenuController(window)
+    autoUpdateListener(window)
     await window.loadFile(path.join(__dirname, '../index.html'))
     await window.webContents.executeJavaScript(`localStorage.setItem("installed", "${JSON.stringify(readInstalledVersions())}"); `)
     window.webContents.on('did-finish-load', async (e) => {

@@ -25,6 +25,7 @@
     let selected
     let defaultVersion
 
+    $: isReleaseValid = installedVersions.find(v => v === defaultVersion)
 
     const translate = (key) => Localization.HOME[key]
     const internalID = v4()
@@ -73,6 +74,7 @@
 
 
 <Header
+        isReleaseValid={isReleaseValid}
         defaultVersion={defaultVersion}
         basePath={basePath}
         setBasePath={v => basePath = v}
@@ -100,6 +102,7 @@
             getID={e => e.id}
     >
         <ProjectRow
+                isReleaseValid={isReleaseValid}
                 installedVersions={installedVersions}
                 updateVersion={async version =>  {
                         await NodeFS.write(
@@ -111,7 +114,6 @@
                         item.meta.version = version
                         projectsToShow = projectsToShow
                     }}
-                defaultVersion={defaultVersion}
                 selected={selected}
                 open={() => {
                     if(item.meta.version !== defaultVersion){

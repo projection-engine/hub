@@ -4,8 +4,8 @@ export default class Localization {
         RELEASE_NOTES: "Release notes",
         RELEASES: "Releases",
         PROJECT_NAME: "My project",
-        NO_VERSION_INSTALLED: "No editor installation found, please download one",
-        VERSION_WARNING: "Changing versions may break some resources",
+        NO_VERSION_INSTALLED: "No editor installation found, please download one.",
+        VERSION_WARNING: "Changing versions may break some resources.",
         RENAME: "Project renamed",
         RENAME_ERROR: "Error renaming editor",
         LOADING: "Loading projects",
@@ -31,13 +31,18 @@ export default class Localization {
         LAST_MODIFIED: "Last modified",
         CREATION: "Creation date",
         RECENT: "Recent",
-        DOUBLE_CLICK: "Double click to rename",
-        FAVORITE: "Toggle favorite",
-        DOWNLOAD_FINISHED: "Download finished",
-        NOT_COMPATIBLE: "This version is not compatible with your OS",
+        DOUBLE_CLICK: "Double click to rename.",
+        FAVORITE: "Toggle favorite.",
+        DOWNLOAD_FINISHED: "Download finished.",
+        NOT_COMPATIBLE: "This version is not compatible with your OS.",
         UNINSTALL: "Uninstall",
         CHANGE_BASE_DIR: "Change source directory",
-        NO_VERSION: "No version linked"
+        NO_VERSION: "No version linked.",
+        NO_UPDATES: "You are up-to-date.",
+        CHECK_UPDATE_HUB: "Check for updates.",
+        FETCHING_UPDATES: "Fetching updates.",
+        ERROR_UPDATE: "Some error occurred during update.",
+        INSTALLING_UPDATES: "Installing updates, your app may restart after some time."
     }
 
 }

@@ -17,11 +17,9 @@
     export let setBasePath
     export let basePath
     export let defaultVersion
-
+    export let isReleaseValid
     let openInput = false
     let modal
-
-    let input = ""
 
     function handler(event) {
         if (!modal.firstChild.contains(event.target))
@@ -65,14 +63,19 @@
         </button>
         <div data-vertdivider="-"></div>
         {#if defaultVersion}
-            <small style="font-size: .7rem">{defaultVersion}</small>
+            <small style={(isReleaseValid ? "": "color: #ff5555;") + "font-size: .7rem"}>
+                {defaultVersion}
+                {#if !isReleaseValid}
+                    <ToolTip content={translate("NO_VERSION_INSTALLED")}/>
+                {/if}
+            </small>
         {:else}
             <small style="font-size: .7rem; color: #ff5555; font-weight: 550">{translate("NO_VERSION")}</small>
         {/if}
     </div>
 
     <button
-            disabled={!defaultVersion}
+            disabled={!isReleaseValid}
             on:click={() => openInput = true}
             data-overflow="-"
             data-focusbutton="-"

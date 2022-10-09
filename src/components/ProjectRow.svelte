@@ -12,7 +12,7 @@
     export let data
     export let onRename
     export let selected
-    export let defaultVersion
+    export let isReleaseValid
     export let updateVersion
     export let installedVersions
     $: isSelected = selected === data.id
@@ -122,7 +122,7 @@
             <small>{translate("LAST_MODIFIED")}</small>
         </div>
         <div data-vertdivider="-"></div>
-        <button disabled={!defaultVersion} on:click={() => open()} data-focusbutton="-">Open</button>
+        <button disabled={!isReleaseValid} on:click={() => open()} data-focusbutton="-">Open</button>
     </div>
 </div>
 

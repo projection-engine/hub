@@ -11,3 +11,5 @@ out
 
 /src-tauri/target
 src-tauri/target
+dist
+/dist

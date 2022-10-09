@@ -1,5 +1,1 @@
-- Added version selection dropdown to project row
-- Added native context menu
-- Visual rework for download modal
-- EULA
-- Package json configuration for build
+- Implementing auto-updates
