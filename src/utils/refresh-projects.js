@@ -12,7 +12,8 @@ export default async function refreshProjects(path) {
     for (let i = 0; i < res.length; i++) {
         const itemPath = path + NodeFS.sep + res[i]
         const stat = await NodeFS.stat(itemPath)
-        if(!stat.isDirectory)
+
+        if(!stat?.isDirectory)
             continue
         const children = await NodeFS.readdir(itemPath)
         if(!children)

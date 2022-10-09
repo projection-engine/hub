@@ -62,7 +62,7 @@
             <ToolTip content={translate("CHANGE_BASE_DIR")}/>
         </button>
         <div data-vertdivider="-"></div>
-        {#if defaultVersion}
+        {#if defaultVersion != null && defaultVersion !== "null"}
             <small style={(isReleaseValid ? "": "color: #ff5555;") + "font-size: .7rem"}>
                 {defaultVersion}
                 {#if !isReleaseValid}

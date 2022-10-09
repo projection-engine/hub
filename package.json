@@ -16,6 +16,7 @@
   "license": "MIT",
 
   "build": {
+    "files": ["node_modules/electron"],
     "appId": "engine.projection.hub",
     "win": {
       "target": [

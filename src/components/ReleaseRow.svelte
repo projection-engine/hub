@@ -17,7 +17,7 @@
     function install() {
 
         const platform = navigator.userAgentData.platform.toLowerCase().split(/\s/)[0]
-        const parsed = platform.includes("windows") ? "win32" : "linux"
+        const parsed = platform.includes("windows") ? "windows" : "linux"
         const foundRelease = release.assets.find(asset => asset.name.includes(parsed))
         if (!foundRelease) {
             alert.pushAlert(translate("NOT_COMPATIBLE"))
@@ -66,11 +66,12 @@
                     style="--pj-accent-color: #ff5555"
                     class="button"
                     on:click={() => {
-                    if(release.tag_name === defaultVersion)
-                        setDefaultVersion(undefined)
+                        if(release.tag_name === defaultVersion)
+                            setDefaultVersion(undefined)
 
-                    ipcRenderer.send("uninstall-version", release.tag_name)
-                }}
+                        ipcRenderer.send("uninstall-version", release.tag_name)
+                        localStorage.removeItem("CURRENT_VERSION")
+                    }}
             >
                 <Icon>delete_forever</Icon>
                 <ToolTip content={translate("UNINSTALL")}/>

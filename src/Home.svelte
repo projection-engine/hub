@@ -54,7 +54,6 @@
                 tab = 1
             }
         })
-        document.addEventListener("keydown", e => e.preventDefault())
     })
 
 
