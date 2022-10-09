@@ -2,17 +2,18 @@ import rm from "shared-resources/backend/utils/rm"
 import fileSystem from "shared-resources/backend/file-system"
 import contextMenuController from "shared-resources/backend/context-menu-controller";
 import autoUpdateListener from "./utils/auto-update-listener";
+import readInstalledVersions from "./utils/read-installed-versions";
+import downloadFile from "./utils/download-file";
+import INSTALL_PATH from "./static/INSTALL_PATH";
+import openProject from "./utils/open-project";
+import startEvents from "./utils/start-events";
 
 const {BrowserWindow, dialog, ipcMain, screen} = require('electron');
 
 const path = require("path");
-const startEvents = require("./utils/start-events");
-const readInstalledVersions = require("./utils/read-installed-versions");
-const INSTALL_PATH = require("./static/INSTALL_PATH");
 const fs = require("fs")
-const downloadFile = require("./utils/download-file");
+
 const decompress = require("decompress");
-const openProject = require("./utils/open-project");
 
 
 async function updateInstalls(win) {
@@ -69,7 +70,8 @@ async function createEnvironment() {
         if (fs.existsSync(DIR))
             return
         fs.mkdirSync(DIR)
-        const result = await downloadFile(requestPath, window, DIR, "COMPRESSED.zip")
+        const result = await downloadFile(requestPath, window, DIR, "COMPRESSED.zip", false)
+        console.log(result, DIR)
         if (result.isDone()) {
             await decompress(DIR + path.sep + "COMPRESSED.zip", DIR)
             updateInstalls(window).catch()

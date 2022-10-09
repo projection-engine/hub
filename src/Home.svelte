@@ -32,7 +32,6 @@
                 }
                 downloadTabOpen = false
                 alert.pushAlert(translate("DOWNLOAD_FINISHED"), "success")
-
             }
             if (progress.percent * 100 >= 100)
                 return

@@ -17,8 +17,8 @@
     function install() {
 
         const platform = navigator.userAgentData.platform.toLowerCase().split(/\s/)[0]
-        const parsed = platform.includes("windows") ? "windows" : "linux"
-        const foundRelease = release.assets.find(asset => asset.name.includes(parsed))
+
+        const foundRelease = release.assets.find(asset => asset.name.includes(platform.includes("windows") ? "windows" : "linux") || asset.name.includes(platform.includes("windows") ? "win32" : "----"))
         if (!foundRelease) {
             alert.pushAlert(translate("NOT_COMPATIBLE"))
             return

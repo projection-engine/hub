@@ -16,7 +16,6 @@
   "license": "MIT",
 
   "build": {
-    "files": ["node_modules/electron"],
     "appId": "engine.projection.hub",
     "win": {
       "target": [
@@ -24,6 +23,7 @@
       ],
       "icon": "icon.ico"
     },
+    "asar": false,
     "nsis": {
       "oneClick": true,
       "installerIcon": "icon.ico",
