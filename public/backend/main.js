@@ -1,5 +1,6 @@
 import rm from "shared-resources/backend/utils/rm"
 import fileSystem from "shared-resources/backend/file-system"
+import contextMenuController from "shared-resources/backend/context-menu-controller";
 
 const {BrowserWindow, dialog, ipcMain, screen} = require('electron');
 
@@ -36,6 +37,7 @@ async function createEnvironment() {
         autoHideMenuBar: true,
         icon: path.resolve(__dirname, "../APP_LOGO.png"),
     });
+    contextMenuController(window)
     await window.loadFile(path.join(__dirname, '../index.html'))
     await window.webContents.executeJavaScript(`localStorage.setItem("installed", "${JSON.stringify(readInstalledVersions())}"); `)
     window.webContents.on('did-finish-load', async (e) => {

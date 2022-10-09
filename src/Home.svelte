@@ -11,27 +11,48 @@
 
     const {ipcRenderer} = window.require("electron")
     let tab = 0
-    let downloadProgress = undefined
+    let downloadProgress = {
+        progress: -1,
+        name: undefined,
+        size: -1
+    }
     let downloadTabOpen = false
     let installedReleases
     const translate = (key) => Localization.HOME[key]
     onMount(() => {
-        let timeout
+
         ipcRenderer.on("download-progress", (event, progress) => {
-            downloadProgress = progress.percent * 100
-            if (downloadProgress === 100) {
-                clearTimeout(timeout)
-                timeout = setTimeout(() => {
-                    downloadProgress = undefined
-                    downloadTabOpen = false
-                    alert.pushAlert(translate("DOWNLOAD_FINISHED"), "success")
-                })
-            } else if (!downloadTabOpen)
+            console.log(progress)
+            if (progress.percent * 100 >= 100 && downloadProgress.progress > -1) {
+                downloadProgress = {
+                    progress: -1,
+                    name: undefined,
+                    size: -1
+                }
+                downloadTabOpen = false
+                alert.pushAlert(translate("DOWNLOAD_FINISHED"), "success")
+
+            }
+            if (progress.percent * 100 >= 100)
+                return
+            downloadProgress = {
+                ...downloadProgress,
+                progress: progress.percent * 100,
+                size: (progress.totalBytes /1e+6).toFixed(2)
+            }
+            if (!downloadTabOpen)
                 downloadTabOpen = true
         })
         ipcRenderer.send("releases-update")
         setInterval(() => ipcRenderer.send("releases-update"), 1000)
-        ipcRenderer.on("releases-update", (event, data) => installedReleases = data)
+        ipcRenderer.on("releases-update", (event, data) => {
+
+            installedReleases = data
+            if (data.length === 0) {
+                alert.pushAlert(translate("NO_VERSION_INSTALLED"), 7000)
+                tab = 1
+            }
+        })
     })
 
 
@@ -59,9 +80,10 @@
     <Downloads open={downloadTabOpen} progress={downloadProgress}/>
     <div class="tab">
         {#if tab === 0}
-            <Projects/>
+            <Projects installedVersions={installedReleases}/>
         {:else}
-            <ReleasesList installedReleases={installedReleases}/>
+            <ReleasesList setVersionOnDownload={v => downloadProgress = {...downloadProgress, name: v}}
+                          installedReleases={installedReleases}/>
         {/if}
     </div>
 </div>

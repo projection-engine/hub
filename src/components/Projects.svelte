@@ -11,15 +11,20 @@
     import PROJECT_FILE_EXTENSION from "shared-resources/PROJECT_FILE_EXTENSION";
     import List from "./List.svelte";
 
+
     const pathLib = window.require("path")
     const os = window.require("os")
     const {ipcRenderer, shell} = window.require("electron")
+
+    export let installedVersions
+
     let basePath
     let searchString = ""
     let projectsToShow = []
     let currentVersion
     let selected
     let defaultVersion
+
 
     const translate = (key) => Localization.HOME[key]
     const internalID = v4()
@@ -95,14 +100,15 @@
             getID={e => e.id}
     >
         <ProjectRow
-                updateVersion={async _ => {
+                installedVersions={installedVersions}
+                updateVersion={async version =>  {
                         await NodeFS.write(
                             item.path + NodeFS.sep + PROJECT_FILE_EXTENSION,
                          JSON.stringify({
                             ...item.meta,
-                            version: defaultVersion
+                            version
                         }))
-                        item.meta.version = defaultVersion
+                        item.meta.version = version
                         projectsToShow = projectsToShow
                     }}
                 defaultVersion={defaultVersion}

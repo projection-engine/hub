@@ -4,8 +4,8 @@ export default class Localization {
         RELEASE_NOTES: "Release notes",
         RELEASES: "Releases",
         PROJECT_NAME: "My project",
-
-
+        NO_VERSION_INSTALLED: "No editor installation found, please download one",
+        VERSION_WARNING: "Changing versions may break some resources",
         RENAME: "Project renamed",
         RENAME_ERROR: "Error renaming editor",
         LOADING: "Loading projects",
@@ -37,8 +37,7 @@ export default class Localization {
         NOT_COMPATIBLE: "This version is not compatible with your OS",
         UNINSTALL: "Uninstall",
         CHANGE_BASE_DIR: "Change source directory",
-        NO_VERSION: "No version linked",
-        NO_VERSION_USING_DEFAULT: "No version linked, click to use current version."
+        NO_VERSION: "No version linked"
     }
 
 }

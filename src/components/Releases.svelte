@@ -6,6 +6,8 @@
     import List from "./List.svelte";
 
     export let installedReleases = []
+    export let setVersionOnDownload
+
     let searchString = ""
     let releases = []
     let defaultVersion
@@ -38,6 +40,7 @@
         getID={e => e.tag_name}
 >
     <ReleaseRow
+            setVersionOnDownload={setVersionOnDownload}
             defaultVersion={defaultVersion}
             setDefaultVersion={v => defaultVersion = v}
             installedReleases={installedReleases}

@@ -31,9 +31,16 @@
         {translate("DOWNLOADS")}
     </div>
     <div data-divider="-"></div>
-    {#if progress != null}
-        <progress max="100" value={progress}></progress>
-        {:else}
+    {#if progress.progress > -1}
+
+        <div class="section">
+            <div data-inline="-" style="justify-content: space-between">
+                <small style="font-size: .75rem">{progress.name}</small>
+                <small style="font-size: .65rem">{progress.size}mb</small>
+            </div>
+            <progress max="100" value={progress.progress}></progress>
+        </div>
+    {:else}
         <div data-empty="-" style="position: relative; transform: none; top: initial; left: initial">
             <Icon styles="font-size: 75px; color: #999;">file_download</Icon>
             {Localization.HOME.EMPTY}
@@ -42,13 +49,33 @@
 </div>
 
 <style>
-    .header{
+    .section{
+        padding: 4px;
+        width: 100%;
+        display: grid;
+        gap: 4px;
+    }
+    progress{
+        width: 100%;
+        height: 25px;
+        border-radius: 25px;
+    }
+    progress[value]::-webkit-progress-bar {
+        background-color: var(--pj-background-tertiary);
+        border-radius: 5px;
+        overflow: hidden;
+    }
+    progress[value]::-webkit-progress-value {
+        background: var(--pj-accent-color);
+    }
+    .header {
         width: 100%;
         font-size: .9rem;
         font-weight: 550;
         text-align: left;
         padding-bottom: 8px;
     }
+
     .modal {
         border-radius: 3px;
         width: clamp(250px, 20vw, 1000px);

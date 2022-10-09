@@ -2,6 +2,7 @@
     import Localization from "../Localization";
     import Input from "shared-resources/frontend/components/input/Input.svelte";
     import Icon from "shared-resources/frontend/components/icon/Icon.svelte";
+    import Dropdown from "shared-resources/frontend/components/dropdown/Dropdown.svelte";
     import "../css/ProjectRow.css"
     import ToolTip from "shared-resources/frontend/components/tooltip/ToolTip.svelte";
 
@@ -13,7 +14,7 @@
     export let selected
     export let defaultVersion
     export let updateVersion
-
+    export let installedVersions
     $: isSelected = selected === data.id
     let changeDate
     let hovered
@@ -92,20 +93,29 @@
     </div>
 
     <div class="content">
-        {#if data.meta.version}
-            <small>{data.meta.version}</small>
-        {:else if defaultVersion != null}
-            <button
-                    class="button"
-                    disabled={!defaultVersion}
-                    on:click={updateVersion}
-            >
-                <Icon styles="color: orange; font-size: .9rem">
-                    info
-                    <ToolTip content={translate("NO_VERSION_USING_DEFAULT")}/>
-                </Icon>
+        <Dropdown asButton={true} buttonStyles=" background: var(--pj-background-primary);">
+            <button style="border: none;min-width: 75px;" slot="button">
+                {#if data.meta.version != null}
+                    {data.meta.version}
+                {:else}
+                    {translate("NO_VERSION_USING_DEFAULT")}
+                {/if}
             </button>
-        {/if}
+            <div class="warning">
+                {translate("VERSION_WARNING")}
+            </div>
+            <div data-divider="-"></div>
+            {#each installedVersions as version}
+                <button on:click={() => updateVersion(version)}>
+                    {#if data.meta.version === version}
+                        <Icon styles="font-size: .9rem">check</Icon>
+                        {:else}
+                        <div style="width: .9rem"></div>
+                    {/if}
+                    {version}
+                </button>
+            {/each}
+        </Dropdown>
         <div data-vertdivider="-"></div>
         <div class={"info card-home"} style="text-align: right" data-overflow="-">
             <strong>{changeDate}</strong>
@@ -148,11 +158,10 @@
         justify-content: flex-end;
         justify-items: flex-end;
     }
-
-    .button {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border: none;
-    }
+.warning{
+    color: darkorange;
+    padding: 4px;
+    font-size: .75rem;
+    font-weight: 550;
+}
 </style>

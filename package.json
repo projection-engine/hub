@@ -14,6 +14,22 @@
   "keywords": [],
   "author": "facobackup",
   "license": "MIT",
+  "build": {
+    "appId": "engine.projection.hub",
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "icon": "icon.ico"
+    },
+    "nsis": {
+      "oneClick": true,
+      "intallerIcon": "icon.ico",
+      "uninstallerIcon": "icon.ico",
+      "uninstallDisplayName": "Projection Engine HUB - Uninstaller",
+      "license": "EULA.md"
+    }
+  },
   "dependencies": {
     "decompress": "^4.2.1",
     "electron-dl": "^3.3.1",

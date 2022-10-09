@@ -9,6 +9,7 @@
     export let installedReleases
     export let defaultVersion
     export let setDefaultVersion
+    export let setVersionOnDownload
 
     const translate = (key) => Localization.HOME[key]
     $: isInstalled = installedReleases.find(r => r === release.tag_name)
@@ -23,6 +24,7 @@
             return
         }
         ipcRenderer.send("install-version", {version: release.tag_name, requestPath: foundRelease.browser_download_url})
+        setVersionOnDownload(release.tag_name)
         if (!defaultVersion) {
             localStorage.setItem("CURRENT_VERSION", release.tag_name)
             setDefaultVersion(release.tag_name)
