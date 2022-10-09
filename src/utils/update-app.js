@@ -1,6 +1,6 @@
 import Localization from "../Localization";
 
-const EXCEPTION = "TEST-3"
+const EXCEPTION = "APP-WINDOWS"
 const {ipcRenderer} = window.require("electron")
 const translate = (key) => Localization.HOME[key]
 export default async function updateApp() {

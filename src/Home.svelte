@@ -54,6 +54,7 @@
                 tab = 1
             }
         })
+        document.addEventListener("keydown", e => e.preventDefault())
     })
 
 
@@ -84,6 +85,7 @@
                 ],
                 ["file_download", translate("TOGGLE_DOWNLOADS"), "bottom", downloadTabOpen]
             ]}
+            version={Localization.VERSION}
     />
     <Downloads open={downloadTabOpen} progress={downloadProgress}/>
     <div class="tab">

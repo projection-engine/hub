@@ -39,10 +39,11 @@ export default class Localization {
         CHANGE_BASE_DIR: "Change source directory",
         NO_VERSION: "No version linked.",
         NO_UPDATES: "You are up-to-date.",
-        CHECK_UPDATE_HUB: "Check for updates.",
+        CHECK_UPDATE_HUB: "Check for updates",
         FETCHING_UPDATES: "Fetching updates.",
         ERROR_UPDATE: "Some error occurred during update.",
         INSTALLING_UPDATES: "Installing updates, your app may restart after some time."
     }
+    static  VERSION = "1.0.0-beta"
 
 }

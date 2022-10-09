@@ -1,1 +1,1 @@
-- Auto-updates working
+- Preparing for release

@@ -2257,7 +2257,7 @@ set-blocking@^2.0.0:
 
 "shared-resources@https://github.com/projection-engine/shared-resources.git":
   version "0.0.0"
-  resolved "https://github.com/projection-engine/shared-resources.git#51d346d4a09c26b00a336b23dbb0e25f2ee50935"
+  resolved "https://github.com/projection-engine/shared-resources.git#0604c4e29b97e2b6e6a0cf75d33284cf80b7309c"
 
 shebang-command@^2.0.0:
   version "2.0.0"

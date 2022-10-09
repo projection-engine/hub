@@ -27,6 +27,7 @@
       "oneClick": true,
       "installerIcon": "icon.ico",
       "uninstallerIcon": "icon.ico",
+
       "uninstallDisplayName": "Projection Engine HUB - Uninstaller",
       "license": "EULA.md"
     }

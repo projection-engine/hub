@@ -8,7 +8,7 @@ const fs = require('fs')
 export default function autoUpdateListener(window) {
     ipcMain.on("update-app", async (event, data) => {
         const upperDir = path.resolve(__dirname, ".." + path.sep)
-        console.log(data)
+
         try {
             const result = await downloadFile(data.assets[0].browser_download_url, window, upperDir + path.sep, "build.zip", true)
             if (result.isDone()) {
@@ -22,6 +22,5 @@ export default function autoUpdateListener(window) {
         } catch (err) {
             console.error(err)
         }
-
     })
 }
