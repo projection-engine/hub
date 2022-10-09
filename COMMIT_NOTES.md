@@ -1,1 +1,1 @@
-- Implementing auto-updates
+- Auto-updates working
